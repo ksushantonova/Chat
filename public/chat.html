@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../styles.css" />
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js'></script>
+  </head>
+
+  <body>
+    <div id="messages"></div>
+    <form id="form" action="">
+      <input id="m" autocomplete="off" />
+      <button>Send</button>
+    </form>
+    <script>
+      class User {
+        constructor() {
+          this.nickName = "";
+          this.email = "";
+          this.password = "";
+          this.userid = "";
+        }
+
+        initUser(data) {
+          this.nickName = data.name;
+          this.email = data.email;
+          this.password = data.pass;
+          this.userid = data.userid;
+        }
+      }
+
+      class Controller {
+        constructor(socket, user) {
+          this.socket = socket;
+          this.user = user;
+        }
+
+        init() {
+          document.getElementById("form").addEventListener("submit", e => {
+            e.preventDefault();
+
+            const message = {
+              message: document.getElementById("m").value,
+              username: this.user.nickName,
+              userid: this.user.userid
+            };
+            this.socket.emit("message", JSON.stringify(message));
+
+            document.getElementById("m").value = "";
+            return false;
+          });
+
+          this.socket.on("initUser", data => {
+            this.user.initUser(data);
+          });
+
+          this.socket.on("message", msg => {
+            const data = JSON.parse(msg);
+            const message = document.createElement("div");
+            message.innerHTML = `${data.username}:${data.message}`;
+            document.getElementById("messages").appendChild(message);
+          });
+        }
+      }
+
+      const socket = io("http://localhost:3000");
+
+      const user = new User();
+      const controller = new Controller(socket, user);
+      controller.init();
+
+    </script>
+  </body>
+</html>

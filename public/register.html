@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js'></script>
+  </head>
+
+  <body>
+    <form method='post' id="register" action="/chat">
+      <div>Enter name</div>
+      <input id="name" autocomplete="off" />
+      <div>Enter password</div>
+      <input id="password" autocomplete="off" />
+      <div>Email password</div>
+      <input id="email" autocomplete="off" />
+      <button>Start</button>
+    </form>
+    <script>
+
+      const socket = io("http://localhost:3000");
+
+      document.getElementById("register").addEventListener("submit", e => {
+        e.preventDefault();
+        const name = document.getElementById("name").value;
+        const password = document.getElementById("password").value;
+        const email = document.getElementById("email").value;
+        const http = new XMLHttpRequest();
+        const params = `name=${name}&pass=${password}&email=${email}`;
+
+        http.open("POST", "/chat", true);
+        http.setRequestHeader(
+          "Content-type",
+          "application/x-www-form-urlencoded"
+        );
+
+        http.onreadystatechange = () => {
+          if (http.readyState == 4 && http.status == 200) {
+            alert(http.responseText);
+          }
+        };
+
+        http.send(params);
+        window.location.href = "/chat";
+        return false;
+      });
+    </script>
+  </body>
+</html>
