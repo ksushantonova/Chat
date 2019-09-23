@@ -11,6 +11,7 @@
       "jest": "^24.9.0",
       "pg-native": "^3.0.0",
       "through": "^2.3.8",
+      "ts-jest": "^24.1.0",
       "ts-loader": "^6.1.0",
       "ts-node": "^3.3.0",
       "tslint": "^5.19.0",
@@ -35,6 +36,7 @@
       "webpack": "^4.40.2"
    },
    "scripts": {
+      "test:unit": "jest --forceExit --verbose --passWithNoTests --coverage",
       "start": "dotenv ts-node src/app.ts",
       "database": "dotenv ts-node src/postgres.ts",
       "build": "webpack"

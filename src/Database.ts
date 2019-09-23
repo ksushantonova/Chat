@@ -1,8 +1,6 @@
 import {
-  createConnection,
   Connection,
   ConnectionOptions,
-  getRepository,
   Repository,
 } from 'typeorm';
 import { join } from 'path';
@@ -12,32 +10,38 @@ import { Message } from './entity/Message.entity';
 import { Dialogs } from './entity/DialogUsers.entity';
 import { RegisterData, Messages } from '../interfaces';
 
-export class Database {
+export default class Database {
   connection: Promise<Connection>;
+  createConnection: any;
+  getRepository: any;
+  userRepo: any;
 
-  constructor() {
+  constructor(createConnection:any, getRepository: any) {
     this.connection;
+    this.getRepository = getRepository;
+    this.createConnection = createConnection;
+    this.userRepo;
   }
 
   init() {
     const connectionOpts: ConnectionOptions = {
       type: 'postgres',
       host: 'localhost',
-      port: 54320,
+      port: 5432,
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE_NAME,
       entities: [join(__dirname, '**/**.entity{.ts,.js}')],
     };
 
-    this.connection = createConnection(connectionOpts);
+    this.connection = this.createConnection(connectionOpts);
   }
 
   async createNewUser(data: RegisterData) {
     const id = Math.floor(Math.random() * 100000);
     const { name, email, pass, userid } = data;
-    const userRepo: Repository<Users> = getRepository(Users);
-    const user: Users = userRepo.create({
+    this.userRepo = this.getRepository(Users);
+    const user: Users = this.userRepo.create({
       id,
       userid,
       name,
@@ -45,7 +49,7 @@ export class Database {
       pass,
     });
 
-    await userRepo.save(user);
+    await this.userRepo.save(user);
   }
 
   writeMessageToDatabase(data: Messages, dialogid: string) {
@@ -65,7 +69,7 @@ export class Database {
     message: string,
     ) {
     const id = Math.floor(Math.random() * 100000);
-    const messageRepo: Repository<Message> = getRepository(Message);
+    const messageRepo: Repository<Message> = this.getRepository(Message);
     const userMessage: Message = messageRepo.create({
       id,
       time,
@@ -80,7 +84,7 @@ export class Database {
 
   async addToDialogUseridTable(messageid: string, dialogid: string) {
     const id = Math.floor(Math.random() * 100000);
-    const dialogRepo: Repository<Dialogs> = getRepository(Dialogs);
+    const dialogRepo: Repository<Dialogs> = this.getRepository(Dialogs);
     const userDialog: Dialogs = dialogRepo.create({
       id,
       messageid,

@@ -17,28 +17,3 @@ export class Users extends BaseEntity {
   @Column('varchar', { length: 30, nullable: true })
   pass: string;
 }
-
-// {
-//    "type": "postgres",
-//    "host": "localhost",
-//    "port": 5432,
-//    "username": "ksu",
-//    "password": "aaa",
-//    "database": "chat",
-//    "synchronize": true,
-//    "logging": false,
-//    "entities": [
-//       "src/entity/**/*.entity.ts"
-//    ],
-//    "migrations": [
-//       "src/migration/**/*.ts"
-//    ],
-//    "subscribers": [
-//       "src/subscriber/**/*.ts"
-//    ],
-//    "cli": {
-//       "entitiesDir": "src/entity",
-//       "migrationsDir": "src/migration",
-//       "subscribersDir": "src/subscriber"
-//    }
-// }
