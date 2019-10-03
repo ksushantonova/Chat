@@ -18,7 +18,6 @@ export default class MockDatabase extends Database {
 }
 
 describe('Database', () => {
-
   const database = new MockDatabase(createConnection, getRepository);
 
   it('have been inited', () => {
@@ -49,6 +48,5 @@ describe('Database', () => {
     await database.writeMessageToDatabase(message, 'dialogid');
     expect(database.userRepo.create).toHaveBeenCalledTimes(1);
     expect(database.userRepo.save).toHaveBeenCalledTimes(1);
-  })
-;
+  });
 });

@@ -1,5 +1,4 @@
 import { ChatController } from './ChatController';
-// tslint:disable-next-line: import-name
 import MockDatabase from './Database.spec';
 import { MockSocket, mockSocket, mockIo } from './Socket.spec';
 

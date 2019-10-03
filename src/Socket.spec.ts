@@ -10,8 +10,7 @@ export const mockIo = {
 
 export const mockSocket = {
   emit: jest.fn(),
-  on: jest.fn((data) => {
-  }),
+  on: jest.fn((data) => {}),
   disconnect: jest.fn(),
 };
 
@@ -29,20 +28,9 @@ describe('Socket', () => {
   });
 
   it('on Message', () => {
-    socket.onMessage('dialogid', database);
+    socket.onMessage('dialogid');
     expect(socket.dialogid).toBe('dialogid');
     expect(socket.socket.on).toHaveBeenCalled();
-  });
-
-  it('catched Message', () => {
-    const message = {
-      message: 'aaa',
-      username: 'ksu',
-      userid: 'id',
-    };
-    socket.handler(JSON.stringify(message));
-    expect(socket.io.emit).toHaveBeenCalled();
-    expect(socket.database.writeMessageToDatabase).toHaveBeenCalled();
   });
 
   it('disconnect', () => {

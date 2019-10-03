@@ -1,0 +1,9 @@
+{
+  "type": "postgres",
+  "host": "localhost",
+  "port": 5432,
+  "username": "me",
+  "password": "pass",
+  "database": "chat",
+  "entities": ["src/entity/*.ts"]
+}

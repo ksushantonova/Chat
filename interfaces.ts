@@ -10,3 +10,8 @@ export interface Messages {
   username: string;
   userid: string;
 }
+
+export interface UserSocket {
+  on: (event: string, callback: (data: any) => void) => void;
+  emit: (event: string, data: any) => void;
+}

@@ -1,16 +1,17 @@
-import Database from './Database';
 import uniqid from 'uniqid';
+import Database from './Database';
+import { UserSocket } from '../interfaces';
+import Socket from './Socket';
 
 export class ChatController {
-
-  socket: any;
+  socket: UserSocket;
   io: any;
   database: Database;
   tempUser: string;
   dialogid: string;
-  userSocket: any;
+  userSocket: Socket;
 
-  constructor(database: any) {
+  constructor(database: Database) {
     this.database = database;
   }
 
@@ -19,14 +20,13 @@ export class ChatController {
     this.dialogid = null;
   }
 
-  connect(socket: any, io: any, socketClass: any) {
-    this.userSocket = new socketClass(socket, io);
+  connect(socket: UserSocket, io: any, socketClass: any) {
+    this.userSocket = new socketClass(socket, io, this.database);
     this.userSocket.emit(this.tempUser);
     if (!this.dialogid) {
       this.dialogid = uniqid();
     }
-    this.userSocket.onMessage(this.dialogid, this.database);
+    this.userSocket.onMessage(this.dialogid);
     this.userSocket.disconnect();
   }
-
 }

@@ -1,6 +1,4 @@
-// tslint:disable-next-line: import-name
 import Server from './app';
-// tslint:disable-next-line: import-name
 
 const app = {
   use: jest.fn(),
@@ -28,7 +26,6 @@ class MockServer extends Server {
 
 describe('userServer', () => {
   const server = new MockServer(app, database, io);
-
   it('use', () => {
     const fn = jest.fn();
     server.use(fn);
@@ -41,5 +38,4 @@ describe('userServer', () => {
     server.get('path', fn);
     expect(server.app.get).toHaveBeenCalled();
   });
-
 });
