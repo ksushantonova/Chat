@@ -5,5 +5,7 @@
   "username": "me",
   "password": "pass",
   "database": "chat",
-  "entities": ["src/entity/*.ts"]
+  "entities": ["src/entity/*.ts"],
+  "migrations": ["migration/*.ts"],
+  "cli": { "migrationsDir": "migration" }
 }

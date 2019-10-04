@@ -1,14 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
+import { Entity, Column, BaseEntity, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class Users extends BaseEntity {
-  @PrimaryGeneratedColumn('uuid')
-  id: number;
+  @PrimaryColumn('varchar', { length: 30, unique: true, name: 'user_id' })
+  userId: string;
 
-  @Column('varchar', { length: 30, unique: true })
-  userid: string;
-
-  @Column('varchar', { length: 30, nullable: true })
+  @Column('varchar', { length: 30, nullable: true})
   name: string;
 
   @Column('varchar', { length: 30, nullable: true })

@@ -3,14 +3,14 @@ class User {
     this.nickName = "";
     this.email = "";
     this.password = "";
-    this.userid = "";
+    this.userId = "";
   }
 
   initUser(data) {
     this.nickName = data.name;
     this.email = data.email;
     this.password = data.pass;
-    this.userid = data.userid;
+    this.userId = data.userId;
   }
 }
 
@@ -41,7 +41,7 @@ const chatApp = new Vue({
       const data = {
         message: this.$data.message,
         username: this.$data.user.nickName,
-        userid: this.$data.user.userid
+        userId: this.$data.user.userId
       }
       this.socket.emit("message", JSON.stringify(data));
       this.$data.message = '';

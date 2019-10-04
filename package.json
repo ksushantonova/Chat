@@ -28,6 +28,7 @@
       "ts-jest": "^24.1.0",
       "ts-loader": "^6.1.0",
       "ts-node": "^3.3.0",
+      "tsconfig-paths": "^3.9.0",
       "tslint": "^5.19.0",
       "tslint-config-airbnb": "^5.11.1",
       "typescript": "^3.4.3",
@@ -37,6 +38,11 @@
    "scripts": {
       "test:unit": "jest --forceExit --verbose --passWithNoTests --coverage",
       "start": "dotenv ts-node src/app.ts",
-      "database": "dotenv ts-node src/postgres.ts"
+      "database": "dotenv ts-node src/postgres.ts",
+      "typeorm": "ts-node --project tsconfig.json ./node_modules/.bin/typeorm migration:generate -n newMigration -f ormconfig.json",
+      "migration:create": "sudo typeorm migration:create -n newMigrations",
+      "migration:run": "ts-node --project tsconfig.json ./node_modules/.bin/typeorm migration:run -f ormconfig.json",
+      "migration:revert": "sudo typeorm migration:revert",
+      "migration:generate": "sudo ts-node typeorm migration:generate -n"
    }
 }

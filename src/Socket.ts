@@ -1,40 +1,31 @@
-import { Messages, UserSocket } from '../interfaces';
-import Database from './Database';
-import socketIo from 'socket.io';
+import { controller } from './app';
+
+export interface UserSocket {
+  on: (event: string, callback: (data: any) => void) => void;
+  emit: (event: string, data: any) => void;
+}
 
 export default class Socket {
   socket: UserSocket;
   io: any;
-  database: Database;
-  dialogid: string;
+  dialogId: string;
 
-  constructor(socket: UserSocket, io: any, database: Database) {
-    this.database = database;
+  constructor(socket: UserSocket, io: any) {
     this.socket = socket;
     this.io = io;
-    this.dialogid;
+    this.dialogId;
   }
 
-  emit(tempUser: string) {
-    this.socket.emit('initUser', tempUser);
+  emit(name: string, tempUser: string) {
+    this.socket.emit(name, tempUser);
   }
 
   on(topic: string, handler: any) {
     this.socket.on(topic, handler);
   }
 
-  onMessage(dialogid: string) {
-    this.dialogid = dialogid;
-    this.on('message', (data: string) => {
-      const receivedData: Messages = JSON.parse(data);
-      const message: Messages = {
-        message: receivedData.message,
-        username: receivedData.username,
-        userid: receivedData.userid,
-      };
-      this.io.emit('message', JSON.stringify(message));
-      this.database.writeMessageToDatabase(message, this.dialogid);
-    });
+  onMessage(dialogId: string) {
+    controller.onMessage(dialogId);
   }
 
   disconnect() {

@@ -1,5 +1,15 @@
+Vue.use(VueRouter);
+
+const router = new VueRouter({
+  mode: "history",
+  routes: [
+    { path: '/chat', name: 'chat' }
+  ]
+});
+
 const registerApp = new Vue({
   el: '#registerApp',
+  router,
   data: {
     nameText: 'Enter Name',
     passText: 'Password',
@@ -8,8 +18,8 @@ const registerApp = new Vue({
     name: '',
     pass: '',
     email: '',
+    router: null
   },
-
   methods : {
     initRegister: async function() {
       const data = {
@@ -23,7 +33,8 @@ const registerApp = new Vue({
           },
           body: JSON.stringify(data)
         });
-        window.location.href = "/chat";
+        this.$router.push('chat');
+        this.$router.go('chat');
     },
   }
 });

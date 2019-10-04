@@ -1,35 +1,33 @@
 import express from 'express';
-import http, { IncomingMessage, ServerResponse, OutgoingMessage } from 'http';
+import http from 'http';
 import path from 'path';
 import socketIo from 'socket.io';
 import bodyParser from 'body-parser';
 import uniqid from 'uniqid';
-import { createConnection, getRepository } from 'typeorm';
+import { createConnection, Connection, getRepository  } from 'typeorm';
 import * as core from 'express-serve-static-core';
 import Socket from './Socket';
-import Database from './Database';
 import { ChatController } from './ChatController';
 
-const database = new Database(createConnection, getRepository);
-const controller = new ChatController(database);
+const database = createConnection();
 const app = express();
 const server = http.createServer(app);
+export const controller = new ChatController(database, getRepository);
 export const io = socketIo(server);
 
 export default class Server {
   app: core.Express;
-  database: Database;
   io: socketIo.Server;
+  database: Promise<Connection>;
 
-  constructor(app: core.Express, database: Database, io: socketIo.Server) {
+  constructor(app: core.Express, database: Promise<Connection>, io: socketIo.Server) {
     this.app = app;
     this.database = database;
     this.io = io;
   }
 
   init() {
-    database.init();
-    database.connection.then(() => {
+    database.then(() => {
       server.listen(process.env.PORT, () => {
         console.log(`listening on *:${process.env.PORT}`);
       });
@@ -48,13 +46,15 @@ export default class Server {
 
     app.post('/chat', (req, res) => {
       const data = req.body;
-      data.userid = uniqid();
+      data.userId = uniqid();
+      data.id = uniqid();
       controller.init(data);
-      database.createNewUser(data);
+      controller.addToTable(data, 'user');
     });
 
     io.on('connection', (socket) => {
-      controller.connect(socket, io, Socket);
+      const userSocket = new Socket(socket, this.io);
+      controller.connect(userSocket);
     });
   }
 
