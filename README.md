@@ -1,7 +1,7 @@
-# Awesome Project Build with TypeORM
 
-Steps to run this project:
+docker-compose up -d
 
-1. Run `npm i` command
-2. Setup database settings inside `ormconfig.json` file
-3. Run `npm start` command
+docker exec -it chat psql -d postgres -U me 
+
+\c chat
+
