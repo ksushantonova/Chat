@@ -1,19 +1,14 @@
-import { Dialog } from './entity/DialogUsers.entity';
+import { DatabaseController } from './DatabaseController';
 
-interface DialogData {
+export interface DialogData {
   messageId: string;
   dialogId: string;
 }
 
 export class DialogController {
-  getRepository: any;
   dialogId: string;
 
-  constructor(getRepository: any) {
-    this.getRepository = getRepository;
-  }
-
-  connect(messageId: string, dialogId: string) {
+  saveDialog(messageId: string, dialogId: string, database: DatabaseController) {
     if (!this.dialogId) {
       this.dialogId = dialogId;
     }
@@ -21,12 +16,6 @@ export class DialogController {
       messageId,
       dialogId,
     };
-    this.addToTable(dialogData);
-  }
-
-  async addToTable(data: DialogData) {
-    const repo = this.getRepository(Dialog);
-    const result = repo.create(data);
-    await repo.save(result);
+    database.addToTable(dialogData, 'dialog');
   }
 }

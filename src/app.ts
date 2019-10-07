@@ -10,14 +10,16 @@ import Socket from './Socket';
 import { UserController } from './UserController';
 import { DialogController } from './DialogController';
 import { MessageController } from './MessageController';
+import { DatabaseController } from './DatabaseController';
 
 const database = createConnection();
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
-const userController = new UserController(getRepository);
-const messageController = new MessageController(getRepository);
-const dialogController = new DialogController(getRepository);
+const userController = new UserController();
+const messageController = new MessageController();
+const dialogController = new DialogController();
+const databaseController = new DatabaseController(getRepository);
 
 export default class Server {
   app: core.Express;
@@ -68,14 +70,14 @@ export default class Server {
       data.userId = uniqid();
       data.id = uniqid();
       userController.init(data);
-      userController.addToTable(data);
+      databaseController.addToTable(data, 'user');
     });
   }
 
   initSocketConnection() {
     this.io.on('connection', (socket) => {
-      const userSocket = new Socket(socket, this.io);
-      userController.connect(userSocket);
+      const userSocket = new Socket(socket);
+      userController.initUserSocket(userSocket);
       this.handleMessages(userSocket);
     });
   }
@@ -84,8 +86,8 @@ export default class Server {
     const dialogId = uniqid();
     socket.on('message', (data: string) => {
       const messageId = uniqid();
-      messageController.connect(data, messageId, dialogId);
-      dialogController.connect(messageId, dialogId);
+      messageController.saveMessage(data, messageId, dialogId, databaseController);
+      dialogController.saveDialog(messageId, dialogId, databaseController);
       this.io.emit('message', data);
     });
   }

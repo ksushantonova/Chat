@@ -1,4 +1,4 @@
-import { Message } from './entity/Message.entity';
+import { DatabaseController } from './DatabaseController';
 
 interface UserMessage {
   message: string;
@@ -6,7 +6,7 @@ interface UserMessage {
   userId: string;
 }
 
-interface MessageData {
+export interface MessageData {
   message: string;
   userId: string;
   dialogId: string;
@@ -15,13 +15,7 @@ interface MessageData {
 }
 
 export class MessageController {
-  getRepository: any;
-
-  constructor(getRepository: any) {
-    this.getRepository = getRepository;
-  }
-
-  connect(data: string, messageId: string, dialogId: string) {
+  saveMessage(data: string, messageId: string, dialogId: string, database: DatabaseController) {
     const receivedData: UserMessage = JSON.parse(data);
     const messageData: MessageData = {
       dialogId,
@@ -30,12 +24,6 @@ export class MessageController {
       userId: receivedData.userId,
       message: receivedData.message,
     };
-    this.addToTable(messageData);
-  }
-
-  async addToTable(data: MessageData) {
-    const repo = this.getRepository(Message);
-    const result = repo.create(data);
-    await repo.save(result);
+    database.addToTable(messageData, 'message');
   }
 }

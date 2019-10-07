@@ -5,13 +5,9 @@ export interface UserSocket {
 
 export default class Socket {
   socket: UserSocket;
-  io: any;
-  dialogId: string;
 
-  constructor(socket: UserSocket, io: any) {
+  constructor(socket: UserSocket) {
     this.socket = socket;
-    this.io = io;
-    this.dialogId;
   }
 
   emit(name: string, tempUser: string) {
