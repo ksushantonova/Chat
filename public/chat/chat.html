@@ -18,10 +18,6 @@
       <input v-model='message' id="messageEnterBox" autocomplete="off" />
       <button v-on:click='sendMessage'>Send</button>
     </div>
-    <script>
-        const socket = io("http://localhost:3000");
-        console.log(socket);
-      </script>
     <script src='chat.js'></script>
   </body>
 </html>

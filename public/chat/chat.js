@@ -26,13 +26,13 @@ const chatApp = new Vue({
     }],
   },
   created: function () {
+    this.socket = io("http://localhost:3000");
     this.$data.user = new User();
-    socket.on("initUser", data => {
+    this.socket.on("initUser", data => {
       this.$data.user.initUser(data);
     });
-    socket.on("message", msg => {
+    this.socket.on("message", msg => {
       const data = JSON.parse(msg);
-      console.log('got message ', data);
       chatApp.messages.push(data);
     });
   },
@@ -43,7 +43,7 @@ const chatApp = new Vue({
         username: this.$data.user.nickName,
         userId: this.$data.user.userId
       }
-      socket.emit("message", JSON.stringify(data));
+      this.socket.emit("message", JSON.stringify(data));
       this.$data.message = '';
     }
   }
