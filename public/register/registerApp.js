@@ -16,14 +16,14 @@ const registerApp = new Vue({
     emailText: 'Email',
     buttonText: 'Start',
     name: '',
-    pass: '',
+    password: '',
     email: '',
     router: null
   },
   methods : {
     initRegister: async function() {
       const data = {
-        name: this.$data.name, pass: this.$data.pass, email: this.$data.email
+        name: this.$data.name, password: this.$data.password, email: this.$data.email
       }
         fetch('/chat', {
           method: 'POST',

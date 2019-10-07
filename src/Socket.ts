@@ -1,5 +1,3 @@
-import { controller } from './app';
-
 export interface UserSocket {
   on: (event: string, callback: (data: any) => void) => void;
   emit: (event: string, data: any) => void;
@@ -24,15 +22,7 @@ export default class Socket {
     this.socket.on(topic, handler);
   }
 
-  onMessage(dialogId: string) {
-    controller.onMessage(dialogId);
-  }
-
-  disconnect() {
-    this.on('disconnect', this.callback);
-  }
-
-  callback() {
+  disconnectCallback() {
     console.log('user disconnected');
   }
 }
