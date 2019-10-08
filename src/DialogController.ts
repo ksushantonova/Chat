@@ -1,4 +1,4 @@
-import { DatabaseController } from './DatabaseController';
+import { TypeOrmDialogRepository } from './typeorm/repositories/dialog';
 
 export interface DialogData {
   messageId: string;
@@ -8,7 +8,7 @@ export interface DialogData {
 export class DialogController {
   dialogId: string;
 
-  saveDialog(messageId: string, dialogId: string, database: DatabaseController) {
+  saveDialog(messageId: string, dialogId: string) {
     if (!this.dialogId) {
       this.dialogId = dialogId;
     }
@@ -16,6 +16,7 @@ export class DialogController {
       messageId,
       dialogId,
     };
-    database.addToTable(dialogData, 'dialog');
+    const repository = new TypeOrmDialogRepository();
+    repository.add(dialogData);
   }
 }

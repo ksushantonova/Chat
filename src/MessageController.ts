@@ -1,4 +1,4 @@
-import { DatabaseController } from './DatabaseController';
+import { TypeOrmMessageRepository } from './typeorm/repositories/message';
 
 interface UserMessage {
   message: string;
@@ -15,7 +15,7 @@ export interface MessageData {
 }
 
 export class MessageController {
-  saveMessage(data: string, messageId: string, dialogId: string, database: DatabaseController) {
+  saveMessage(data: string, messageId: string, dialogId: string) {
     const receivedData: UserMessage = JSON.parse(data);
     const messageData: MessageData = {
       dialogId,
@@ -24,6 +24,7 @@ export class MessageController {
       userId: receivedData.userId,
       message: receivedData.message,
     };
-    database.addToTable(messageData, 'message');
+    const repository = new TypeOrmMessageRepository();
+    repository.add(messageData);
   }
 }
