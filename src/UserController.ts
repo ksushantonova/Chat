@@ -1,7 +1,7 @@
 import Socket from './Socket';
+import { TypeOrmUserRepository } from './typeorm/repositories/user';
 
 export interface UserData {
-  id: string;
   name: string;
   email: string;
   password: string;
@@ -19,5 +19,10 @@ export class UserController {
   initUserSocket(userSocket: Socket) {
     this.socket = userSocket;
     this.socket.emit('initUser', this.tempUser);
+  }
+
+  saveUser(data: UserData) {
+    const repository = new TypeOrmUserRepository();
+    repository.add(data);
   }
 }

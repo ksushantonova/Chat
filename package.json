@@ -31,6 +31,7 @@
       "tsconfig-paths": "^3.9.0",
       "tslint": "^5.19.0",
       "tslint-config-airbnb": "^5.11.1",
+      "types.d.ts": "^0.4.9",
       "typescript": "^3.4.3",
       "uniqid": "^5.0.3",
       "webpack-cli": "^3.3.9"
@@ -39,7 +40,7 @@
       "test:unit": "jest --forceExit --verbose --passWithNoTests --coverage",
       "start": "dotenv ts-node src/app.ts",
       "database": "dotenv ts-node src/postgres.ts",
-      "typeorm": "ts-node --project tsconfig.json ./node_modules/.bin/typeorm migration:generate -n newMigration -f ormconfig.json",
+      "typeorm": "ts-node --project tsconfig.json ./node_modules/.bin/typeorm migration:generate -n init_migration -f ormconfig.json",
       "migration:create": "sudo typeorm migration:create -n newMigrations",
       "migration:run": "ts-node --project tsconfig.json ./node_modules/.bin/typeorm migration:run -f ormconfig.json",
       "migration:revert": "sudo typeorm migration:revert",

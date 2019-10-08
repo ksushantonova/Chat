@@ -1,7 +1,8 @@
 import { Entity, PrimaryColumn, Column, BaseEntity } from 'typeorm';
+import { Message } from '../../entities/message';
 
-@Entity()
-export class Message extends BaseEntity{
+@Entity({ name: 'messages' })
+export class MessageModel extends BaseEntity implements Message {
   @PrimaryColumn('varchar', { length: 30, unique: true, name: 'message_id' })
   messageId: string;
 
