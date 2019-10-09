@@ -1,4 +1,4 @@
-import { TypeOrmDialogRepository } from './typeorm/repositories/dialog';
+import { TypeOrmDialogRepository } from '../typeorm/repositories/dialog';
 
 export interface DialogData {
   messageId: string;

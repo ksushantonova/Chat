@@ -29,7 +29,8 @@ const chatApp = new Vue({
     this.socket = io("http://localhost:3000");
     this.$data.user = new User();
     this.socket.on("initUser", data => {
-      this.$data.user.initUser(data);
+      const userData = JSON.parse(data);
+      this.$data.user.initUser(userData);
     });
     this.socket.on("message", msg => {
       const data = JSON.parse(msg);
