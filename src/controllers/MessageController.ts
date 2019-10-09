@@ -1,4 +1,4 @@
-import { TypeOrmMessageRepository } from './typeorm/repositories/message';
+import { TypeOrmMessageRepository } from '../typeorm/repositories/message';
 
 interface UserMessage {
   message: string;
