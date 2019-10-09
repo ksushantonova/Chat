@@ -34,7 +34,7 @@ router.get('/chat', (req, res) => {
 });
 
 router.post('/chat', (req, res) => {
-  mainServer.initPostMethod(req.body);
+  mainServer.handleUser(req.body);
 });
 
 io.on('connection', (socket) => {
@@ -43,7 +43,7 @@ io.on('connection', (socket) => {
 
   userSocket.on('message', (data: string) => {
     const messageId = uniqid();
-    mainServer.handleMesage(data, messageId);
+    mainServer.handleMessage(data, messageId);
     mainServer.handleDialogMessage(messageId);
     io.emit('message', data);
   });

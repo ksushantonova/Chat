@@ -26,7 +26,7 @@ export default class Server {
     this.initDatabase();
   }
 
-  initPostMethod(data: UserData) {
+  handleUser(data: UserData) {
     data.userId = uniqid();
     this.incomeData = data;
     this.userController.saveUser(data);
@@ -36,7 +36,7 @@ export default class Server {
     socket.emit('initUser', JSON.stringify(this.incomeData));
   }
 
-  handleMesage(data: string, messageId: string) {
+  handleMessage(data: string, messageId: string) {
     this.messageController.saveMessage(data, messageId, this.dialogId);
   }
 
