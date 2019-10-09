@@ -1,50 +1,26 @@
 import express from 'express';
 import http from 'http';
 import bodyParser from 'body-parser';
-import path from 'path';
-import uniqid from 'uniqid';
-import socketIo from 'socket.io';
-import { UserController } from './controllers/UserController';
-import { DialogController } from './controllers/DialogController';
-import { MessageController } from './controllers/MessageController';
-import Server from './Server';
-import Socket from './Socket';
+import { Socket } from './socket';
+import { routes } from './routes';
+import { UserSocket } from './sockets/user-socket-component';
 
-export const app = express();
-const userController = new UserController();
-const messageController = new MessageController();
-const dialogController = new DialogController();
-const mainServer = new Server(userController, messageController, dialogController);
-export const router = express.Router();
-export const server = http.createServer(app);
-const io = socketIo(server);
+const app = express();
+const server = http.createServer(app);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public/register'));
 app.use(express.static('public/chat'));
-app.use('/', router);
+app.use('/', routes);
 
-router.get('/', (req, res) => {
-  res.sendFile('register.html',  { root: path.join(__dirname, '../public/register') });
+export const socket = new Socket(server);
+
+socket.on('connection', (ioSocket: any) => {
+  const userSocket = new UserSocket(ioSocket, socket);
+  socket.subscribe(ioSocket, 'push_message', userSocket.pushMessage);
 });
 
-router.get('/chat', (req, res) => {
-  res.sendFile('chat.html',  { root: path.join(__dirname, '../public/chat') });
-});
-
-router.post('/chat', (req, res) => {
-  mainServer.handleUser(req.body);
-});
-
-io.on('connection', (socket) => {
-  const userSocket = new Socket(socket);
-  mainServer.initSocketConnection(userSocket);
-
-  userSocket.on('message', (data: string) => {
-    const messageId = uniqid();
-    mainServer.handleMessage(data, messageId);
-    mainServer.handleDialogMessage(messageId);
-    io.emit('message', data);
-  });
+server.listen(process.env.PORT, () => {
+  console.log(`listening on *:${process.env.PORT}`);
 });

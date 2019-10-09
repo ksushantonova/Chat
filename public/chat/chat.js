@@ -32,7 +32,7 @@ const chatApp = new Vue({
       const userData = JSON.parse(data);
       this.$data.user.initUser(userData);
     });
-    this.socket.on("message", msg => {
+    this.socket.on("push_message", msg => {
       const data = JSON.parse(msg);
       chatApp.messages.push(data);
     });
@@ -44,7 +44,7 @@ const chatApp = new Vue({
         username: this.$data.user.nickName,
         userId: this.$data.user.userId
       }
-      this.socket.emit("message", JSON.stringify(data));
+      this.socket.emit("push_message", JSON.stringify(data));
       this.$data.message = '';
     }
   }

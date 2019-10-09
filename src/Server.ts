@@ -3,8 +3,6 @@ import uniqid from 'uniqid';
 import { UserController, UserData } from './controllers/UserController';
 import { MessageController } from './controllers/MessageController';
 import { DialogController } from './controllers/DialogController';
-import { server } from './app';
-import { UserSocket } from './Socket';
 
 const database = createConnection();
 
@@ -32,10 +30,6 @@ export default class Server {
     this.userController.saveUser(data);
   }
 
-  initSocketConnection(socket: UserSocket) {
-    socket.emit('initUser', JSON.stringify(this.incomeData));
-  }
-
   handleMessage(data: string, messageId: string) {
     this.messageController.saveMessage(data, messageId, this.dialogId);
   }
@@ -46,9 +40,7 @@ export default class Server {
 
   initDatabase() {
     database.then(() => {
-      server.listen(process.env.PORT, () => {
-        console.log(`listening on *:${process.env.PORT}`);
-      });
+      console.log('database inited');
     });
   }
 }
