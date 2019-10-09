@@ -1,7 +1,7 @@
 import { MessageModel } from '../models/message.entity';
 import { Message } from '../../entities/message';
 import { getConnection } from 'typeorm';
-import { MessageData } from '../../MessageController';
+import { MessageData } from '../../controllers/MessageController';
 
 export class TypeOrmMessageRepository {
   public async add(message: MessageData): Promise<Message> {

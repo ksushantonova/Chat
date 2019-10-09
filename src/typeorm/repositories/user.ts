@@ -1,7 +1,7 @@
 import { UserModel } from '../models/user.entity';
 import { User } from '../../entities/user';
 import { getConnection } from 'typeorm';
-import { UserData } from '../../UserController';
+import { UserData } from '../../controllers/UserController';
 
 export class TypeOrmUserRepository {
   public async add(user: UserData): Promise<User> {

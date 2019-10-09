@@ -1,80 +1,47 @@
-import * as core from 'express-serve-static-core';
-import { Connection, createConnection } from 'typeorm';
-import socketIo from 'socket.io';
-import http from 'http';
-import bodyParser from 'body-parser';
-import express from 'express';
-import path from 'path';
-import { UserController } from './UserController';
-import { MessageController } from './MessageController';
-import { DialogController } from './DialogController';
+import { createConnection } from 'typeorm';
 import uniqid from 'uniqid';
-import Socket from './Socket';
-import { app } from './app';
+import { UserController, UserData } from './controllers/UserController';
+import { MessageController } from './controllers/MessageController';
+import { DialogController } from './controllers/DialogController';
+import { server } from './app';
+import { UserSocket } from './Socket';
 
 const database = createConnection();
-const server = http.createServer(app);
-const io = socketIo(server);
-
 
 export default class Server {
-  init(
+  userController: UserController;
+  messageController: MessageController;
+  dialogController: DialogController;
+  incomeData: UserData;
+  dialogId: string;
+
+  constructor(
     userController: UserController,
     messageController: MessageController,
     dialogController: DialogController) {
+    this.userController = userController;
+    this.messageController = messageController;
+    this.dialogController = dialogController;
+    this.dialogId = uniqid();
     this.initDatabase();
-    this.initSettings();
-    this.initGetMethods();
-    this.initPostMethods(userController);
-    this.initSocketConnection(userController, messageController, dialogController);
   }
 
-  initSettings() {
-    app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({ extended: true }));
-    app.use(express.static('public/register'));
-    app.use(express.static('public/chat'));
+  handleUser(data: UserData) {
+    data.userId = uniqid();
+    this.incomeData = data;
+    this.userController.saveUser(data);
   }
 
-  initGetMethods() {
-    app.get('/', (req: any, res: any) => {
-      res.sendFile('register.html',  { root: path.join(__dirname, '../public/register') });
-    });
-    app.get('/chat', (req: any, res: any) => {
-      res.sendFile('chat.html',  { root: path.join(__dirname, '../public/chat') });
-    });
+  initSocketConnection(socket: UserSocket) {
+    socket.emit('initUser', JSON.stringify(this.incomeData));
   }
 
-  initPostMethods(userController: UserController) {
-    app.post('/chat', (req, res) => {
-      const data = req.body;
-      data.userId = uniqid();
-      data.id = uniqid();
-      userController.init(data);
-      userController.saveUser(data);
-    });
+  handleMessage(data: string, messageId: string) {
+    this.messageController.saveMessage(data, messageId, this.dialogId);
   }
 
-  initSocketConnection(
-    userController: UserController,
-    messageController: MessageController,
-    dialogController: DialogController) {
-    io.on('connection', (socket) => {
-      const userSocket = new Socket(socket);
-      userController.initUserSocket(userSocket);
-      this.handleMessages(userSocket, messageController, dialogController);
-    });
-  }
-
-  handleMessages(
-    socket: Socket, messageController: MessageController, dialogController: DialogController) {
-    const dialogId = uniqid();
-    socket.on('message', (data: string) => {
-      const messageId = uniqid();
-      messageController.saveMessage(data, messageId, dialogId);
-      dialogController.saveDialog(messageId, dialogId);
-      io.emit('message', data);
-    });
+  handleDialogMessage(messageId: string) {
+    this.dialogController.saveDialog(messageId, this.dialogId);
   }
 
   initDatabase() {
