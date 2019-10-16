@@ -13,6 +13,7 @@ export const Register = Vue.component('Register', {
       <div>{{ emailTextRegister  }}</div>
       <input v-model='email' autocomplete="off" />
       <button v-on:click='initRegister'>{{ buttonTextRegister }}</button>
+      <h5 v-if="registered" style="color:green">Вы зарегестрированы! Залогиньтесь пожалуйста!</h5>
       <h2>Log in</h2>
       <div>{{ nameTextLogin }}</div>
       <input v-model='name' autocomplete="off" />
@@ -30,6 +31,7 @@ export const Register = Vue.component('Register', {
         nameTextLogin: 'Enter Name',
         passTextLogin: 'Password',
         buttonTextLogin: 'Login',
+        registered: false,
         name: '',
         password: '',
         email: '',
@@ -45,7 +47,6 @@ export const Register = Vue.component('Register', {
         const identity = Buffer.from(this.$data.name);
         const verifier = srpBigint.computeVerifier(params, salt, identity, password);
         this.c = new srpBigint.Client(params, salt, identity, password, secret1);
-
         const data = {
           name: this.$data.name, 
           password: this.$data.password, 
@@ -62,7 +63,7 @@ export const Register = Vue.component('Register', {
             },
             body: JSON.stringify(data)
           });
-          // this.$router.push({ name: 'chat', params: { c: c } });
+          this.$data.registered = true;
       },
       async initLogin() {
         const identity = Buffer.from(this.$data.name);
@@ -71,7 +72,6 @@ export const Register = Vue.component('Register', {
           identity,
           requestName: 'auth_step_0',
         }
-
         let response2 = await fetch('/', {
           method: 'POST',
           headers: {
@@ -80,16 +80,15 @@ export const Register = Vue.component('Register', {
           },
           body: JSON.stringify(data)
         });
-
         let result = await response2.text();
         const salt = bufferJson.parse(result);
         const secret1 = await srpBigint.genKey();
         const password = Buffer.from(this.$data.password);
         this.c = new srpBigint.Client(params, salt, identity, password, secret1);
-
-        this.getAuthData();
+        const sprA = this.c.computeA();
+        this.getAuthData(sprA);
       },
-      async getAuthData() {
+      async getAuthData(sprA) {
         let response = await fetch('/', {
           method: 'POST',
           headers: {
@@ -98,9 +97,7 @@ export const Register = Vue.component('Register', {
           },
           body: JSON.stringify({requestName: 'auth_step_2'})
         });
-    
         let result = await response.text();
-
         if(this.c){
           const buffer = bufferJson.parse(result);
           this.c.setB(buffer.buf);
@@ -111,18 +108,18 @@ export const Register = Vue.component('Register', {
               'Accept': 'application/json',
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify({requestName: 'auth_step_3', m1: M1, sprA: this.c.computeA() })
+            body: JSON.stringify({
+              requestName: 'auth_step_3', 
+              m1: M1,
+              sprA
+            })
           });
-  
-          // let result2 = await response2.text();
-          // const bufferResult = bufferJson.parse(result2);
+          let result2 = await response2.text();
+          const bufferResult = bufferJson.parse(result2);
           let K = this.c.computeK();
-  
-          //сравнение
-          console.log(K);
-          console.log(bufferResult.buf);
-          this.$router.push({ name: 'chat', params: { c: c } });
-
+          if(bufferJson.stringify(bufferResult.buf) == bufferJson.stringify(K)){
+            this.$router.push({ name: 'chat', params: { key: K } });
+          }
         }
       },
     }

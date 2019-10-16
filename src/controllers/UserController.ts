@@ -1,5 +1,6 @@
 import { TypeOrmUserRepository } from '../typeorm/repositories/user';
 import bufferJson from 'buffer-json';
+import { User } from '../entities/user';
 
 export interface UserData {
   name: string;
@@ -13,7 +14,7 @@ export interface UserData {
 export class UserController {
   repository: TypeOrmUserRepository;
 
-  saveUser(data: UserData) {
+  saveUser(data: User) {
     this.repository = new TypeOrmUserRepository();
     this.repository.add(data);
   }

@@ -1,19 +1,15 @@
+import aes256 from 'aes256';
 import bufferJson from 'buffer-json';
 
 class User {
   constructor() {
     this.nickName = "";
-    this.email = "";
-    this.password = "";
     this.userId = "";
   }
 
   initUser(data) {
     this.nickName = data.name;
-    this.email = data.email;
-    this.password = data.password;
     this.userId = data.userId;
-    this.c = data.c;
   }
 }
 
@@ -30,6 +26,7 @@ export const Chat = Vue.component('Chat', {
   data: function() {
     return {
       message: '',
+      key: '',
       user: null,
       socket: null,
       messages: [{
@@ -38,7 +35,7 @@ export const Chat = Vue.component('Chat', {
     }],
   }},
   created: function () {
-    this.getAuthData();
+    this.$data.key = bufferJson.stringify(this.$route.params.key);
     this.socket = io("http://localhost:3000");
     this.$data.user = new User();
     this.socket.on("initUser", data => {
@@ -47,13 +44,18 @@ export const Chat = Vue.component('Chat', {
     });
     this.socket.on("push_message", msg => {
       const data = JSON.parse(msg);
-      this.$data.messages.push(data);
+      const message = {
+        message: aes256.decrypt(this.$data.key, data.message),
+        username: this.user.nickName
+      }
+      this.$data.messages.push(message);
     });
   },
   methods : {
     sendMessage: function() {
+      const encryptedMessage = aes256.encrypt(this.$data.key, this.$data.message);
       const data = {
-        message: this.$data.message,
+        message: encryptedMessage,
         username: this.$data.user.nickName,
         userId: this.$data.user.userId
       }

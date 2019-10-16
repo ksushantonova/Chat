@@ -12,7 +12,6 @@ routes.post('/', (req, res) => {
   if (req.body.requestName === 'auth_step_0') {
     (async () => {
       const salt = await mainServer.getSalt(req.body);
-      console.log('lalla', salt);
       res.send(salt);
     })();
   } else if (req.body.requestName === 'auth_step_1') {
