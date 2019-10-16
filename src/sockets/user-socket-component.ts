@@ -1,6 +1,6 @@
 import uniqid from 'uniqid';
 import { SocketComponent } from './socket-component';
-import { UserController, UserData } from '../controllers/UserController';
+import { UserController } from '../controllers/UserController';
 import { DialogController } from '../controllers/DialogController';
 import { MessageController } from '../controllers/MessageController';
 import Server from '../Server';
@@ -15,7 +15,10 @@ export class UserSocket extends SocketComponent {
     super();
     this.ioSocket = ioSocket;
     this.socket = socket;
-    this.ioSocket.emit('initUser', JSON.stringify(mainServer.incomeData));
+    const data = {
+      incomeData: mainServer.incomeData,
+    };
+    this.ioSocket.emit('initUser', JSON.stringify(data));
   }
 
   socket: any;

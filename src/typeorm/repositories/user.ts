@@ -15,4 +15,16 @@ export class TypeOrmUserRepository {
     }
     return;
   }
+
+  public async find(identity: string): Promise<User> {
+    if (identity) {
+      const result = await getConnection()
+      .createQueryBuilder()
+      .select('users')
+      .from(UserModel, 'users')
+      .where('users.identity = :identity', { identity })
+      .getOne();
+      return result;
+    }
+  }
 }
