@@ -7,18 +7,18 @@ export const Register = Vue.component('Register', {
     <div id=registerApp>
       <h2>Register</h2>
       <div>{{ nameTextRegister }}</div>
-      <input v-model='name' autocompconste="off" />
+      <input v-model='name' autocomplete="off" />
       <div>{{ passTextRegister }}</div>
-      <input v-model='password' autocompconste="off" />
+      <input v-model='password' autocomplete="off" />
       <div>{{ emailTextRegister  }}</div>
-      <input v-model='email' autocompconste="off" />
+      <input v-model='email' autocomplete="off" />
       <button v-on:click='initRegister'>{{ buttonTextRegister }}</button>
       <h5 v-if="registered" style="color:green">Вы зарегестрированы! Залогиньтесь пожалуйста!</h5>
       <h2>Log in</h2>
       <div>{{ nameTextLogin }}</div>
-      <input v-model='name' autocompconste="off" />
+      <input v-model='name' autocomplete="off" />
       <div>{{ passTextLogin }}</div>
-      <input v-model='password' autocompconste="off" />
+      <input v-model='password' autocomplete="off" />
       <button v-on:click='initLogin'>{{ buttonTextLogin }}</button>
     </div>
   `,
@@ -55,7 +55,7 @@ export const Register = Vue.component('Register', {
         name: this.$data.name, 
         password: this.$data.password, 
         requestName: 'auth_step_1',
-      }
+      };
 
       fetch('/', {
         method: 'POST',
@@ -75,7 +75,7 @@ export const Register = Vue.component('Register', {
       const data = {
         identity,
         requestName: 'auth_step_0',
-      }
+      };
 
       const response2 = await fetch('/', {
         method: 'POST',
@@ -92,7 +92,7 @@ export const Register = Vue.component('Register', {
       const password = Buffer.from(this.$data.password);
       this.c = new srpBigint.Client(params, salt, identity, password, secret1);
       const sprA = this.c.computeA();
-      
+
       this.getAuthData(sprA);
       },
       async getAuthData(sprA) {
@@ -130,8 +130,8 @@ export const Register = Vue.component('Register', {
 
           if (result2){
             this.$router.push({ name: 'chat', params: { key: K } });
-          }
-        }
+          };
+        };
       },
     }
   });
