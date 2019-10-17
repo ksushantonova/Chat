@@ -5,7 +5,7 @@ import { mainServer } from './sockets/user-socket-component';
 export const routes = express.Router();
 
 routes.get('/', (req, res) => {
-  res.sendFile('index.html',  { root: path.join(__dirname, '../public/chat') });
+  res.sendFile('index.html', { root: path.join(__dirname, '../public/chat') });
 });
 
 routes.post('/', (req, res) => {

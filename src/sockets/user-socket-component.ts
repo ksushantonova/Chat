@@ -8,17 +8,22 @@ import Server from '../Server';
 const userController = new UserController();
 const messageController = new MessageController();
 const dialogController = new DialogController();
-export const mainServer = new Server(userController, messageController, dialogController);
+export const mainServer = new Server(
+  userController,
+  messageController,
+  dialogController,
+);
 
 export class UserSocket extends SocketComponent {
   constructor(ioSocket: any, socket: any) {
     super();
     this.ioSocket = ioSocket;
     this.socket = socket;
-    const data = {
-      incomeData: mainServer.incomeData,
-    };
-    this.ioSocket.emit('initUser', JSON.stringify(data));
+
+    this.ioSocket.emit(
+      'initUser',
+      JSON.stringify({ incomeData: mainServer.incomeData })
+    );
   }
 
   socket: any;

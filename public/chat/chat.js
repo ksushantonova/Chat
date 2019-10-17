@@ -1,10 +1,10 @@
-import aes256 from 'aes256';
-import bufferJson from 'buffer-json';
+import aes256 from "aes256";
+import bufferJson from "buffer-json";
 
 class User {
   constructor() {
-    this.nickName = '';
-    this.userId = '';
+    this.nickName = "";
+    this.userId = "";
   }
 
   initUser(data) {
@@ -13,7 +13,7 @@ class User {
   }
 }
 
-export default Chat = Vue.component('Chat', {
+export default Chat = Vue.component("Chat", {
   template: `
   <div id="chatApp">
     <div v-for="item in messages">
@@ -25,16 +25,19 @@ export default Chat = Vue.component('Chat', {
   `,
   data: function() {
     return {
-      message: '',
-      key: '',
+      message: "",
+      key: "",
       user: null,
       socket: null,
-      messages: [{
-        username: 'admin',
-        message: 'Nice to meet you here!'
-    }],
-  }},
-  created: function () {
+      messages: [
+        {
+          username: "admin",
+          message: "Nice to meet you here!"
+        }
+      ]
+    };
+  },
+  created: function() {
     this.$data.key = bufferJson.stringify(this.$route.params.key);
     this.socket = io("http://localhost:3000");
     this.$data.user = new User();
@@ -43,26 +46,29 @@ export default Chat = Vue.component('Chat', {
       const userData = JSON.parse(data);
       this.$data.user.initUser(userData.incomeData);
     });
-    
+
     this.socket.on("push_message", msg => {
       const data = JSON.parse(msg);
       const message = {
         message: aes256.decrypt(this.$data.key, data.message),
         username: this.user.nickName
-      }
+      };
       this.$data.messages.push(message);
     });
   },
-  methods : {
+  methods: {
     sendMessage: function() {
-      const encryptedMessage = aes256.encrypt(this.$data.key, this.$data.message);
+      const encryptedMessage = aes256.encrypt(
+        this.$data.key,
+        this.$data.message
+      );
       const data = {
         message: encryptedMessage,
         username: this.$data.user.nickName,
         userId: this.$data.user.userId
-      }
+      };
       this.socket.emit("push_message", JSON.stringify(data));
-      this.$data.message = '';
+      this.$data.message = "";
     }
   }
 });

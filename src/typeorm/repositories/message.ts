@@ -7,11 +7,11 @@ export class TypeOrmMessageRepository {
   public async add(message: MessageData): Promise<Message> {
     if (message.messageId) {
       await getConnection()
-      .createQueryBuilder()
-      .insert()
-      .into(MessageModel)
-      .values(message)
-      .execute();
+        .createQueryBuilder()
+        .insert()
+        .into(MessageModel)
+        .values(message)
+        .execute();
     }
     return;
   }

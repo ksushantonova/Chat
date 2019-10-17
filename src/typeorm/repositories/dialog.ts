@@ -7,11 +7,11 @@ export class TypeOrmDialogRepository {
   public async add(dialog: DialogData): Promise<Dialog> {
     if (dialog.dialogId) {
       await getConnection()
-      .createQueryBuilder()
-      .insert()
-      .into(DialogModel)
-      .values(dialog)
-      .execute();
+        .createQueryBuilder()
+        .insert()
+        .into(DialogModel)
+        .values(dialog)
+        .execute();
     }
     return;
   }

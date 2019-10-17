@@ -1,35 +1,29 @@
 {
   "compilerOptions": {
-      "module": "commonjs",
-      "target": "es2018",
-      "lib": ["es6", "es7", "dom"],
-      "types": ["reflect-metadata", "node", "jest"],
-      "sourceMap": true,
-      "moduleResolution": "node",
-      "rootDir": "src",
-      "baseUrl": ".",
-      "paths": {
-          "*": [
-              "node_modules/*"
-          ]
-      },
-      "allowSyntheticDefaultImports": true,
-      "esModuleInterop": true,
-      "skipLibCheck": true,
-      "allowJs": true,
-      "jsx": "react",
-      "forceConsistentCasingInFileNames": true,
-      "noImplicitReturns": true,
-      "noImplicitThis": true,
-      "suppressImplicitAnyIndexErrors": true,
-      "noUnusedLocals": true,
-      "experimentalDecorators": true
+    "module": "commonjs",
+    "target": "es2018",
+    "lib": ["es6", "es7", "dom"],
+    "types": ["reflect-metadata", "node", "jest"],
+    "sourceMap": true,
+    "moduleResolution": "node",
+    "rootDir": "src",
+    "baseUrl": ".",
+    "paths": {
+      "*": ["node_modules/*"]
+    },
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "allowJs": true,
+    "jsx": "react",
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "noUnusedLocals": true,
+    "experimentalDecorators": true
   },
-  "include": [
-      "src/**/*"
-  ],
-  "exclude": [
-      "src/**/*.spec.ts", "src/entity"
-  ],
-  "typeRoots" : ["node_modules/@types", "src/typings"]
+  "include": ["src/**/*"],
+  "exclude": ["src/**/*.spec.ts", "src/entity"],
+  "typeRoots": ["node_modules/@types", "src/typings"]
 }

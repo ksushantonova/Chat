@@ -1,9 +1,9 @@
-import { Register } from './Register';
-import { Chat } from './Chat';
+import { Register } from "./Register";
+import { Chat } from "./Chat";
 
 const routes = [
-  { path: '/', component: Register, name: 'register' },
-  { path: '/chat', component: Chat, name: 'chat', params: true }
+  { path: "/", component: Register, name: "register" },
+  { path: "/chat", component: Chat, name: "chat", params: true }
 ];
 
 const router = new VueRouter({
@@ -11,6 +11,6 @@ const router = new VueRouter({
 });
 
 new Vue({
-  el: '#app',
+  el: "#app",
   router: router
 });

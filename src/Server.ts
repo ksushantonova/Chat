@@ -27,7 +27,8 @@ export default class Server {
   constructor(
     userController: UserController,
     messageController: MessageController,
-    dialogController: DialogController) {
+    dialogController: DialogController,
+  ) {
     this.userController = userController;
     this.messageController = messageController;
     this.dialogController = dialogController;
@@ -53,7 +54,11 @@ export default class Server {
   async auntUser(res: any) {
     const params = srpBigint.params['2048'];
     const secret2 = await srpBigint.genKey();
-    this.s = new srpBigint.Server(params, Buffer.from(this.incomeData.verifier), secret2);
+    this.s = new srpBigint.Server(
+      params,
+      Buffer.from(this.incomeData.verifier),
+      secret2,
+    );
     const srpB = this.s.computeB();
     const str = bufferJson.stringify({ buf: srpB });
     res.send(str);

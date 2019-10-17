@@ -23,6 +23,7 @@ export class UserController {
     if (!this.repository) {
       this.repository = new TypeOrmUserRepository();
     }
+
     const query = bufferJson.stringify(identity);
     const result = await this.repository.find(query);
     return result;
