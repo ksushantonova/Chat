@@ -12,11 +12,11 @@ module.exports = {
   testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
   testURL: "http://localhost",
   testEnvironment: "node",
-  "unmockedModulePathPatterns": [
-    // "<rootDir>/node_modules/parse5",
-    // "<rootDir>/node_modules/fbjs"
-  ],
   collectCoverageFrom: ["src/**/*.{js,ts,tsx}", "!src/**/*.d.{ts,tsx}"],
-  coveragePathIgnorePatterns: ["<rootDir>/dist/", "<rootDir>/node_modules/", "<rootDir>/src/entity"],
+  coveragePathIgnorePatterns: [
+    "<rootDir>/dist/",
+    "<rootDir>/node_modules/",
+    "<rootDir>/src/entity"
+  ],
   coverageReporters: ["html", "text", "text-summary"]
 };

@@ -9,9 +9,12 @@ export class UserModel extends BaseEntity implements User {
   @Column('varchar', { length: 30, nullable: true })
   name: string;
 
-  @Column('varchar', { length: 30, nullable: true })
-  email: string;
+  @Column('varchar', { nullable: true })
+  identity: string;
 
-  @Column('varchar', { length: 30, nullable: true })
-  password: string;
+  @Column('varchar', { nullable: true })
+  salt: string;
+
+  @Column('varchar', { nullable: true })
+  verifier: string;
 }
