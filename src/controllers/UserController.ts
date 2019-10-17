@@ -1,5 +1,5 @@
-import { TypeOrmUserRepository } from '../typeorm/repositories/user';
 import bufferJson from 'buffer-json';
+import { TypeOrmUserRepository } from '../typeorm/repositories/user';
 import { User } from '../entities/user';
 
 export interface UserData {

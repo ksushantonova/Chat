@@ -3,8 +3,8 @@ import bufferJson from 'buffer-json';
 
 class User {
   constructor() {
-    this.nickName = "";
-    this.userId = "";
+    this.nickName = '';
+    this.userId = '';
   }
 
   initUser(data) {
@@ -13,7 +13,7 @@ class User {
   }
 }
 
-export const Chat = Vue.component('Chat', {
+export default Chat = Vue.component('Chat', {
   template: `
   <div id="chatApp">
     <div v-for="item in messages">
@@ -38,10 +38,12 @@ export const Chat = Vue.component('Chat', {
     this.$data.key = bufferJson.stringify(this.$route.params.key);
     this.socket = io("http://localhost:3000");
     this.$data.user = new User();
+
     this.socket.on("initUser", data => {
       const userData = JSON.parse(data);
       this.$data.user.initUser(userData.incomeData);
     });
+    
     this.socket.on("push_message", msg => {
       const data = JSON.parse(msg);
       const message = {

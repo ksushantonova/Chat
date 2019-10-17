@@ -1,6 +1,6 @@
+import { getConnection } from 'typeorm';
 import { DialogModel } from '../models/dialog.entity';
 import { Dialog } from '../../entities/dialog';
-import { getConnection } from 'typeorm';
 import { DialogData } from '../../controllers/DialogController';
 
 export class TypeOrmDialogRepository {

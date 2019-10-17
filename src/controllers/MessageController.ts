@@ -1,6 +1,5 @@
 import { TypeOrmMessageRepository } from '../typeorm/repositories/message';
 import { mainServer } from '../sockets/user-socket-component';
-import bufferJson from 'buffer-json';
 
 interface UserMessage {
   message: string;

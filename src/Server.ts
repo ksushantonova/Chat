@@ -1,12 +1,12 @@
 import { createConnection } from 'typeorm';
 import uniqid from 'uniqid';
+import aes256 from 'aes256';
+import srpBigint from 'srp-bigint';
+import bufferJson from 'buffer-json';
 import { UserController } from './controllers/UserController';
 import { MessageController } from './controllers/MessageController';
 import { DialogController } from './controllers/DialogController';
-import srpBigint from 'srp-bigint';
-import bufferJson from 'buffer-json';
 import { User } from './entities/user';
-import aes256 from 'aes256';
 
 const database = createConnection();
 
@@ -68,8 +68,7 @@ export default class Server {
     this.s.checkM1(Buffer.from(data.m1));
     const key = this.s.computeK();
     this.encryptKey = bufferJson.stringify(key);
-    const str = bufferJson.stringify({ buf: key });
-    res.send(str);
+    res.send('done');
   }
 
   handleMessage(data: string, messageId: string) {
