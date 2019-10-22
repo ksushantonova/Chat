@@ -1,7 +1,5 @@
 import { createConnection } from 'typeorm';
 import uniqid from 'uniqid';
-import aes256 from 'aes256';
-import srpBigint from 'srp-bigint';
 import bufferJson from 'buffer-json';
 import { UserController } from './controllers/UserController';
 import { MessageController } from './controllers/MessageController';
@@ -37,11 +35,11 @@ export default class Server {
   }
 
   handleUser(data: User) {
-    data.userId = uniqid();
-    this.incomeData = data;
+    data.id = uniqid();
     data.verifier = bufferJson.stringify(data.verifier);
     data.salt = bufferJson.stringify(data.salt);
     data.identity = bufferJson.stringify(data.identity);
+    this.incomeData = data;
     this.userController.saveUser(data);
   }
 
@@ -51,43 +49,8 @@ export default class Server {
     return this.incomeData.salt;
   }
 
-  async auntUser(res: any) {
-    const params = srpBigint.params['2048'];
-    const secret2 = await srpBigint.genKey();
-    this.s = new srpBigint.Server(
-      params,
-      Buffer.from(this.incomeData.verifier),
-      secret2,
-    );
-    const srpB = this.s.computeB();
-    const str = bufferJson.stringify({ buf: srpB });
-    res.send(str);
-  }
-
-  aunthUserStepTwo(data: any, res: any) {
-    if (data.sprA) {
-      this.s.setA(Buffer.from(data.sprA.data));
-    } else {
-      this.s.setA(Buffer.from(this.incomeData.sprA.data));
-    }
-    this.s.checkM1(Buffer.from(data.m1));
-    const key = this.s.computeK();
-    this.encryptKey = bufferJson.stringify(key);
-    res.send('done');
-  }
-
   handleMessage(data: string, messageId: string) {
     this.messageController.saveMessage(data, messageId, this.dialogId);
-  }
-
-  encryptMessage(message: string) {
-    const encrypted = aes256.encrypt(this.encryptKey, message);
-    return encrypted;
-  }
-
-  decryptMessage(message: string) {
-    const decrypted = aes256.decrypt(this.encryptKey, message);
-    return decrypted;
   }
 
   handleDialogMessage(messageId: string) {

@@ -4,7 +4,7 @@ import { Message } from '../../entities/message';
 @Entity({ name: 'messages' })
 export class MessageModel extends BaseEntity implements Message {
   @PrimaryColumn('varchar', { length: 30, unique: true, name: 'message_id' })
-  messageId: string;
+  id: string;
 
   @Column('varchar', { length: 30 })
   time: Date;
