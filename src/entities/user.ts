@@ -1,7 +1,7 @@
 import { BaseEntity } from 'typeorm';
 
 export interface User extends BaseEntity {
-  userId: string;
+  id: string;
   name: string;
   identity: string;
   salt: string;

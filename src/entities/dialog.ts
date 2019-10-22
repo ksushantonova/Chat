@@ -1,6 +1,6 @@
 import { BaseEntity } from 'typeorm';
 
 export interface Dialog extends BaseEntity{
-  dialogId: string;
+  id: string;
   messageId: string;
 }

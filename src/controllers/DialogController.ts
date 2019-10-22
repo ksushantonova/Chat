@@ -2,7 +2,7 @@ import { TypeOrmDialogRepository } from '../typeorm/repositories/dialog';
 
 export interface DialogData {
   messageId: string;
-  dialogId: string;
+  id: string;
 }
 
 export class DialogController {
@@ -14,7 +14,7 @@ export class DialogController {
     }
     const dialogData: DialogData = {
       messageId,
-      dialogId,
+      id: dialogId,
     };
     const repository = new TypeOrmDialogRepository();
     repository.add(dialogData);

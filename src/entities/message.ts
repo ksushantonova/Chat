@@ -1,7 +1,7 @@
 import { BaseEntity } from 'typeorm';
 
 export interface Message extends BaseEntity {
-  messageId: string;
+  id: string;
   time: Date;
   userId: string;
   dialogId: string;

@@ -4,7 +4,7 @@ import { User } from '../../entities/user';
 
 export class TypeOrmUserRepository {
   public async add(user: User): Promise<User> {
-    if (user.userId) {
+    if (user.id) {
       await getConnection()
         .createQueryBuilder()
         .insert()
