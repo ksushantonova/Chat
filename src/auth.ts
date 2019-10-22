@@ -6,7 +6,7 @@ export class Auth {
   encryptKey: Buffer;
   incomeData: any;
 
-  async authUser(res: any, data: any) {
+  async authUserStepTwo(res: any, data: any) {
     this.incomeData = data;
     const params = srpBigint.params['2048'];
     const secret2 = await srpBigint.genKey();
@@ -20,7 +20,7 @@ export class Auth {
     res.send(str);
   }
 
-  aunthUserStepTwo(data: any, res: any) {
+  authUserStepThree(data: any, res: any) {
     if (data.sprA) {
       this.s.setA(Buffer.from(data.sprA.data));
     } else {

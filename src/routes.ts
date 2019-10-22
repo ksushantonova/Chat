@@ -19,8 +19,8 @@ routes.post('/', (req, res) => {
   } else if (req.body.requestName === 'auth_step_1') {
     mainServer.handleUser(req.body);
   } else if (req.body.requestName === 'auth_step_2') {
-    auth.authUser(res, mainServer.incomeData);
+    auth.authUserStepTwo(res, mainServer.incomeData);
   } else if (req.body.requestName === 'auth_step_3') {
-    auth.aunthUserStepTwo(req.body, res);
+    auth.authUserStepThree(req.body, res);
   }
 });

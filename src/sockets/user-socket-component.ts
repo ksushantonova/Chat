@@ -3,7 +3,7 @@ import { SocketComponent } from './socket-component';
 import { UserController } from '../controllers/UserController';
 import { DialogController } from '../controllers/DialogController';
 import { MessageController } from '../controllers/MessageController';
-import Server from '../Server';
+import Server from '../server';
 
 const userController = new UserController();
 const messageController = new MessageController();
