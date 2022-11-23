@@ -11,7 +11,7 @@
     "express": "^4.17.1",
     "express-serve-static-core": "^0.1.1",
     "pg": "^7.12.1",
-    "socket.io": "^2.2.0",
+    "socket.io": "^2.5.0",
     "srp-bigint": "^0.2.1",
     "typeorm": "0.2.18",
     "uuid": "^3.3.3"
